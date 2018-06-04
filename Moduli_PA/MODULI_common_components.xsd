@@ -28,16 +28,54 @@
         </xs:complexContent>
     </xs:complexType>
     
-    <xs:complexType name="ACKType">
+    
+    <xs:complexType name="AllegatoBaseType" abstract="true"/>
+    
+    <xs:complexType name="AllegatoType">
+        <xs:complexContent>
+            <xs:extension base="moduli:AllegatoBaseType">
+                <xs:choice>
+                    <xs:element name="binario" type="moduli:AllegatoBinarioType"/>
+                    <xs:element name="riferimento" type="moduli:AllegatoRiferimentoType"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="AllegatoBinarioType">
+        <xs:complexContent>
+            <xs:extension base="moduli:RiferimentoGenericoAllegatoType">
+                <xs:sequence>
+                    <xs:element name="contenuto" type="xs:base64Binary"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="AllegatoRiferimentoType">
+        <xs:complexContent>
+            <xs:extension base="moduli:RiferimentoGenericoAllegatoType">
+                <xs:sequence>
+                    <xs:element name="hash" type="basic:SHA256Type" minOccurs="0"/>
+                </xs:sequence>
+                <xs:attribute name="href" type="xs:anyURI" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="RiferimentoGenericoAllegatoType" >
+        <xs:annotation>
+            <xs:documentation>Descrive un riferimento generico ad un file allegato.</xs:documentation>
+        </xs:annotation>
         <xs:sequence>
-            <xs:element name="maxVersionManageable ">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:pattern value="[1-9][0-9]*\.[1-9][0-9]*\.[1-9][0-9]*"></xs:pattern>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
+            <xs:element name="nomeFile" type="xs:string" />
+            <xs:element name="descrizione" type="xs:string" minOccurs="0"/>
+            <xs:element name="nomeFileAlt" type="xs:string" minOccurs="0"/>  
+            <xs:element name="mime" type="enumeration:MimeTypeEnum" />  
+            <xs:element name="dimensione" type="xs:positiveInteger" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
+    
+    
     
 </xs:schema>
